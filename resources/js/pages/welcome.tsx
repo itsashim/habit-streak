@@ -11,8 +11,10 @@ export default function Welcome({
     return (
         <>
             <div className="flex min-h-screen flex-col items-center bg-[#FDFDFC] p-6 text-[#1b1b18] lg:justify-center lg:p-8 dark:bg-[#0a0a0a]">
-                <header className="mb-6 w-full max-w-[335px] text-sm not-has-[nav]:hidden lg:max-w-4xl">
-                    <nav className="flex items-center justify-end gap-4">
+                <h1 className='text-[#1b1b18] dark:text-[#EDEDEC] mb-3 text-4xl'>Welcome to,  HabitTracker</h1>
+                <p className='text-[#1b1b18] dark:text-[#EDEDEC] mb-3'>Streak your habits. Solidify your habits.</p>
+                <header className="mb-6 w-full text-sm not-has-[nav]:hidden lg:max-w-4xl">
+                    <nav className="flex items-center justify-center gap-4">
                         {auth.user ? (
                             <Link
                                 href={dashboard()}
