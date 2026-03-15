@@ -1,4 +1,5 @@
 import { usePage } from '@inertiajs/react';
+import ThemeToggle from '@/components/theme-toggle';
 import Home from '@/layouts/partials/home';
 import HomeAuth from '@/layouts/partials/home-auth';
 
@@ -14,6 +15,7 @@ export default function Welcome({
             {auth.user ?
                 (<HomeAuth />) : (<Home canRegister={canRegister} />)
             }
+            <ThemeToggle />
         </>
     );
 }
