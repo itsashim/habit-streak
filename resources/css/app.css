@@ -149,8 +149,15 @@
     body {
         @apply bg-background text-foreground;
     }
+
+    .container {
+        @apply w-full mx-auto px-4;
+        @apply sm:max-w-sm;
+        @apply md:max-w-md;
+        @apply lg:max-w-4xl;
+    }
 }
 
-body{
+body {
     font-family: var(--font-pixel);
 }
