@@ -2,6 +2,7 @@ import { Head, Link } from "@inertiajs/react"
 import { Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import AppLayout from "@/layouts/app-layout"
+import HabitsCreateModal from "@/layouts/dashboard/habits/HabitsCreateModal";
 import HabitsTable from "@/layouts/dashboard/habits/HabitsTable";
 import habits from "@/routes/habits";
 import type { BreadcrumbItem } from "@/types";
@@ -23,6 +24,7 @@ function Habit() {
                 </Link>
                 <HabitsTable />
             </div>
+            <HabitsCreateModal />
         </AppLayout>
     )
 }

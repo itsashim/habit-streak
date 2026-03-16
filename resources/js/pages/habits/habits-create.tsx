@@ -19,6 +19,7 @@ function HabitCreate() {
                 <Link href={habits.create()}>
                     <Button type="button" className="ms-auto max-w-35"><Pencil />Edit</Button>
                 </Link>
+
             </div>
         </AppLayout>
     )
