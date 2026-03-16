@@ -12,7 +12,10 @@ const breadcrumbs: BreadcrumbItem[] = [
         href: habits.index(),
     },
 ];
-function Habit() {
+interface HabitPageProps {
+    habits: { id: number; name: string }[];
+}
+function Habit({ habits }: HabitPageProps) {
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Habits" />
@@ -20,7 +23,7 @@ function Habit() {
                 <div className="ms-auto">
                     <HabitsCreateModal />
                 </div>
-                <HabitsTable />
+                <HabitsTable habits={habits} />
             </div>
         </AppLayout>
     )
