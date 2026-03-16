@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Habit;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 
 class HabitController extends Controller
@@ -28,7 +30,16 @@ class HabitController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validated = $request->validate([
+            'name' => 'required|string|min:2|max:50',
+        ]);
+
+        Habit::create([
+            'user_id' => Auth::id(),
+            'name' => $validated['name'],
+        ]);
+
+        return redirect()->back()->with('success', 'Habit created!');
     }
 
     /**

@@ -1,12 +1,16 @@
 import { Field } from "@headlessui/react"
 import { zodResolver } from "@hookform/resolvers/zod"
+import { router } from "@inertiajs/react";
 import { Plus } from "lucide-react"
+import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 import { z } from "zod";
 import { Button } from "@/components/ui/button"
 import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import habits from "@/routes/habits";
 
 const habitSchema = z.object({
     name: z
@@ -18,6 +22,7 @@ const habitSchema = z.object({
 type HabitFormValues = z.infer<typeof habitSchema>
 
 function HabitsCreateModal() {
+    const [open, setOpen] = useState(false)
     const {
         register,
         handleSubmit,
@@ -28,12 +33,17 @@ function HabitsCreateModal() {
     })
 
     const onSubmit = (data: HabitFormValues) => {
-        console.log("Habit Created:", data);
-        reset();
+        router.post(habits.store(), data, {
+            onSuccess: () => {
+                toast.success("Event has been created");
+                setOpen(false)
+                reset()
+            }
+        })
     }
 
     return (
-        <Dialog>
+        <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
                 <Button type="button" className="ms-auto max-w-35"><Plus /> Create Habit</Button>
             </DialogTrigger>
@@ -56,9 +66,9 @@ function HabitsCreateModal() {
                         <DialogClose asChild>
                             <Button variant="outline">Cancel</Button>
                         </DialogClose>
-                        <DialogClose asChild>
-                            <Button type="submit">Create</Button>
-                        </DialogClose>
+                        {/* <DialogClose asChild> */}
+                        <Button type="submit">Create</Button>
+                        {/* </DialogClose> */}
                     </DialogFooter>
                 </form>
             </DialogContent>
