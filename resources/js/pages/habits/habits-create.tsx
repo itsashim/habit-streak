@@ -1,10 +1,9 @@
-import { Head } from "@inertiajs/react"
-
-import AppLayout from "@/layouts/app-layout"
-import HabitsTable from "@/layouts/dashboard/habits/HabitsTable";
+import { Head, Link } from "@inertiajs/react";
+import { Pencil } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import AppLayout from "@/layouts/app-layout";
 import habits from "@/routes/habits";
 import type { BreadcrumbItem } from "@/types";
-
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -12,15 +11,17 @@ const breadcrumbs: BreadcrumbItem[] = [
         href: habits.index(),
     },
 ];
-function Habit() {
+function HabitCreate() {
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Habits" />
             <div className="flex h-full flex-1 flex-col gap-4 overflow-x-auto rounded-xl p-4">
-                <HabitsTable />
+                <Link href={habits.create()}>
+                    <Button type="button" className="ms-auto max-w-35"><Pencil />Edit</Button>
+                </Link>
             </div>
         </AppLayout>
     )
 }
 
-export default Habit
+export default HabitCreate

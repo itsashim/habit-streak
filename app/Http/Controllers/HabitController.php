@@ -12,7 +12,7 @@ class HabitController extends Controller
      */
     public function index()
     {
-        return Inertia::render('habits');
+        return Inertia::render('habits/habits');
     }
 
     /**
@@ -20,7 +20,7 @@ class HabitController extends Controller
      */
     public function create()
     {
-        //
+        return Inertia::render('habits/habits-create');
     }
 
     /**
