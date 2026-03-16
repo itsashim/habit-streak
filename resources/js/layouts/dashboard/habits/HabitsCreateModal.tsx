@@ -1,42 +1,67 @@
+import { Field } from "@headlessui/react"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { Plus } from "lucide-react"
+import { useForm } from "react-hook-form";
+import { z } from "zod";
 import { Button } from "@/components/ui/button"
 import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Field } from "@headlessui/react"
+
+const habitSchema = z.object({
+    name: z
+        .string()
+        .min(2, "Habit name must be at least 2 characters")
+        .max(50, "Habit name is too long"),
+})
+
+type HabitFormValues = z.infer<typeof habitSchema>
 
 function HabitsCreateModal() {
+    const {
+        register,
+        handleSubmit,
+        formState: { errors },
+        reset,
+    } = useForm<HabitFormValues>({
+        resolver: zodResolver(habitSchema),
+    })
+
+    const onSubmit = (data: HabitFormValues) => {
+        console.log("Habit Created:", data);
+        reset();
+    }
+
     return (
         <Dialog>
-            <form>
-                <DialogTrigger asChild>
-                    <Button variant="outline">Open Dialog</Button>
-                </DialogTrigger>
-                <DialogContent className="sm:max-w-sm">
+            <DialogTrigger asChild>
+                <Button type="button" className="ms-auto max-w-35"><Plus /> Create Habit</Button>
+            </DialogTrigger>
+            <DialogContent className="sm:max-w-sm">
+                <form onSubmit={handleSubmit(onSubmit)}>
                     <DialogHeader>
-                        <DialogTitle>Edit profile</DialogTitle>
+                        <DialogTitle>Create Habit</DialogTitle>
                         <DialogDescription>
-                            Make changes to your profile here. Click save when you&apos;re
-                            done.
+                            Create a habit and track your sreak.
                         </DialogDescription>
                     </DialogHeader>
-                    <FieldGroup>
-                        <Field>
-                            <Label htmlFor="name-1">Name</Label>
-                            <Input id="name-1" name="name" defaultValue="Pedro Duarte" />
-                        </Field>
-                        <Field>
-                            <Label htmlFor="username-1">Username</Label>
-                            <Input id="username-1" name="username" defaultValue="@peduarte" />
-                        </Field>
-                    </FieldGroup>
-                    <DialogFooter>
+                    <Field>
+                        <Label htmlFor="name-1">Name</Label>
+                        <Input {...register("name")} placeholder="Drink water" />
+                    </Field>
+                    {errors.name &&
+                        <p className="text-red-400 py-2">{errors.name.message}</p>
+                    }
+                    <DialogFooter className="mt-3">
                         <DialogClose asChild>
                             <Button variant="outline">Cancel</Button>
                         </DialogClose>
-                        <Button type="submit">Save changes</Button>
+                        <DialogClose asChild>
+                            <Button type="submit">Create</Button>
+                        </DialogClose>
                     </DialogFooter>
-                </DialogContent>
-            </form>
+                </form>
+            </DialogContent>
         </Dialog>
     )
 }

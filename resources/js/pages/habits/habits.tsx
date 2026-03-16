@@ -1,6 +1,4 @@
-import { Head, Link } from "@inertiajs/react"
-import { Plus } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Head } from "@inertiajs/react"
 import AppLayout from "@/layouts/app-layout"
 import HabitsCreateModal from "@/layouts/dashboard/habits/HabitsCreateModal";
 import HabitsTable from "@/layouts/dashboard/habits/HabitsTable";
@@ -19,12 +17,11 @@ function Habit() {
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Habits" />
             <div className="flex h-full flex-1 flex-col gap-4 overflow-x-auto rounded-xl p-4">
-                <Link href={habits.create()}>
-                    <Button type="button" className="ms-auto max-w-35"><Plus /> Create Habit</Button>
-                </Link>
+                <div className="ms-auto">
+                    <HabitsCreateModal />
+                </div>
                 <HabitsTable />
             </div>
-            <HabitsCreateModal />
         </AppLayout>
     )
 }
