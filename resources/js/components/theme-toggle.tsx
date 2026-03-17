@@ -1,3 +1,4 @@
+import { Moon, Sun } from "lucide-react";
 import { useState } from "react";
 
 export default function ThemeToggle() {
@@ -40,7 +41,7 @@ export default function ThemeToggle() {
                        dark:bg-white dark:text-black
                        transition hover:scale-110"
         >
-            {dark ? "☀️" : "🌙"}
+            {dark ? <Sun /> : <Moon />}
         </button>
     );
 }
