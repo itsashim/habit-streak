@@ -12,10 +12,21 @@ class HabitController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $habits = Habit::where('user_id', Auth::id())->orderBy('created_at', 'desc')->paginate(10);
-        return Inertia::render('habits/habits', ['habits' => $habits]);
+        $habits = Habit::query()
+            ->where('user_id', Auth::id())
+            ->when($request->search, function ($query, $search) {
+                $query->where('name', 'like', "%{$search}%");
+            })
+            ->orderBy('created_at', 'desc')
+            ->paginate(10)
+            ->withQueryString(); // keeps search query when paginating
+
+        return Inertia::render('habits/habits', [
+            'habits' => $habits,
+            'filters' => $request->only('search'),
+        ]);
     }
 
     /**

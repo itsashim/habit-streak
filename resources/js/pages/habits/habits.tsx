@@ -1,5 +1,7 @@
-import { Head } from "@inertiajs/react"
+import { Head, router } from "@inertiajs/react"
+import { useEffect, useState } from "react";
 import PaginationWrapper from "@/components/app-pagination";
+import { Input } from "@/components/ui/input";
 import AppLayout from "@/layouts/app-layout"
 import HabitsCreateModal from "@/layouts/dashboard/habits/HabitsCreateModal";
 import HabitsTable from "@/layouts/dashboard/habits/HabitsTable";
@@ -8,7 +10,9 @@ import habits from "@/routes/habits";
 import type { BreadcrumbItem } from "@/types";
 
 interface HabitPageProps {
-    habits: PaginatedData<Habit>;
+    habits: PaginatedData<Habit>,
+    filters: { search: string };
+
 }
 
 const breadcrumbs: BreadcrumbItem[] = [
@@ -18,12 +22,38 @@ const breadcrumbs: BreadcrumbItem[] = [
     },
 ];
 
-function Habit({ habits }: HabitPageProps) {
+function Habit({ habits, filters }: HabitPageProps) {
+    const [search, setSearch] = useState(filters.search || "");
+
+    console.log(filters, "filters");
+
+    // 🔥 Debounce logic
+    useEffect(() => {
+        const timeout = setTimeout(() => {
+            router.get(
+                habits.path,
+                { search },
+                {
+                    preserveState: true,
+                    replace: true,
+                }
+            );
+        }, 400); // 400ms debounce
+
+        return () => clearTimeout(timeout);
+    }, [search]);
+
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Habits" />
             <div className="flex h-full flex-1 flex-col gap-4 overflow-x-auto rounded-xl p-4">
-                <div className="ms-auto">
+                <div className="flex items-center justify-between">
+                    <Input
+                        value={search}
+                        onChange={(e) => setSearch(e.target.value)}
+                        placeholder="Search habits..."
+                        className="w-64"
+                    />
                     <HabitsCreateModal />
                 </div>
                 <HabitsTable habits={habits} />
