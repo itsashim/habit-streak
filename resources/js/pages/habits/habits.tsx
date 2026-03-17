@@ -1,10 +1,15 @@
 import { Head } from "@inertiajs/react"
+import PaginationWrapper from "@/components/app-pagination";
 import AppLayout from "@/layouts/app-layout"
 import HabitsCreateModal from "@/layouts/dashboard/habits/HabitsCreateModal";
 import HabitsTable from "@/layouts/dashboard/habits/HabitsTable";
+import type { Habit, PaginatedData } from "@/layouts/dashboard/habits/types";
 import habits from "@/routes/habits";
 import type { BreadcrumbItem } from "@/types";
 
+interface HabitPageProps {
+    habits: PaginatedData<Habit>;
+}
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -12,9 +17,7 @@ const breadcrumbs: BreadcrumbItem[] = [
         href: habits.index(),
     },
 ];
-interface HabitPageProps {
-    habits: { id: number; name: string }[];
-}
+
 function Habit({ habits }: HabitPageProps) {
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
@@ -24,6 +27,8 @@ function Habit({ habits }: HabitPageProps) {
                     <HabitsCreateModal />
                 </div>
                 <HabitsTable habits={habits} />
+                {/* Pagination */}
+                <PaginationWrapper links={habits.links} />
             </div>
         </AppLayout>
     )

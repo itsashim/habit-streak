@@ -14,7 +14,7 @@ class HabitController extends Controller
      */
     public function index()
     {
-        $habits = Habit::where('user_id', Auth::id())->orderBy('created_at', 'desc')->get();
+        $habits = Habit::where('user_id', Auth::id())->orderBy('created_at', 'desc')->paginate(10);
         return Inertia::render('habits/habits', ['habits' => $habits]);
     }
 

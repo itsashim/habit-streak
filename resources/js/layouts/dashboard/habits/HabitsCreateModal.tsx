@@ -35,7 +35,7 @@ function HabitsCreateModal() {
     const onSubmit = (data: HabitFormValues) => {
         router.post(habits.store(), data, {
             onSuccess: () => {
-                toast.success("Event has been created");
+                toast.success("Habit has been created");
                 setOpen(false)
                 reset()
             }
