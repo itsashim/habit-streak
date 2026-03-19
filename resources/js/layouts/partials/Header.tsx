@@ -10,7 +10,7 @@ function Header() {
     const { auth } = usePage().props;
 
     return (
-        <header className='container py-3'>
+        <header className='py-3'>
             <div className="flex items-center justify-between">
                 <AppBrand />
                 <div className='flex items-center gap-3'>
