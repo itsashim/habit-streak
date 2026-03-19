@@ -1,10 +1,11 @@
-import Header from './header';
+import Header from "./Header"
 
 function HomeAuth() {
 
     return (
         <>
-        <Header/>
+            <Header />
+            
         </>
     )
 }
