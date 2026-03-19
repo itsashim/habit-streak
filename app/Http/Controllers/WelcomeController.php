@@ -19,4 +19,9 @@ class WelcomeController extends Controller
             'habits' => $habits
         ]);
     }
+
+    public function show(Habit $habit){
+
+    return Inertia::render('habits/show',['habit'=>$habit]);
+    }
 }
