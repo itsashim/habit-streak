@@ -10,4 +10,9 @@ class Habit extends Model
         'user_id',
         'name',
     ];
+
+    public function trackers()
+    {
+        return $this->hasMany(HabitTracker::class); // Adjust if your foreign key is different
+    }
 }

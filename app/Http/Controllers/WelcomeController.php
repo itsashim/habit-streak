@@ -12,7 +12,12 @@ class WelcomeController extends Controller
 {
     public function index()
     {
-        $habits = Habit::where('user_id', Auth::id())->paginate(40);
+        $habits = Habit::withCount([
+            'trackers as tracked_today' => function ($query) {
+                $query->where('user_id', Auth::id())
+                    ->whereDate('tracked_on', now());
+            }
+        ])->paginate(40);
 
         return Inertia::render('welcome', [
             'canRegister' => Features::enabled(Features::registration()),
@@ -20,8 +25,9 @@ class WelcomeController extends Controller
         ]);
     }
 
-    public function show(Habit $habit){
+    public function show(Habit $habit)
+    {
 
-    return Inertia::render('habits/show',['habit'=>$habit]);
+        return Inertia::render('habits/show', ['habit' => $habit]);
     }
 }
