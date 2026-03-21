@@ -10,18 +10,28 @@ use Laravel\Fortify\Features;
 
 class WelcomeController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $habits = Habit::withCount([
-            'trackers as tracked_today' => function ($query) {
-                $query->where('user_id', Auth::id())
-                    ->whereDate('tracked_on', now());
-            }
-        ])->paginate(40);
+        $habits = Habit::query()
+            ->when(Auth::check(), function ($q) {
+                $q->where('user_id', Auth::id());
+            })
+            ->withCount([
+                'trackers as tracked_today' => function ($query) {
+                    $query->where('user_id', Auth::id())
+                        ->whereDate('tracked_on', now());
+                }
+            ])
+            ->when($request->search, function ($query, $search) {
+                $query->where('name', 'like', "%{$search}%");
+            })
+            ->paginate(40)
+            ->withQueryString();
 
         return Inertia::render('welcome', [
             'canRegister' => Features::enabled(Features::registration()),
-            'habits' => $habits
+            'habits' => $habits,
+            'filters' => $request->only('search')
         ]);
     }
 
