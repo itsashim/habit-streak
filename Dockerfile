@@ -1,6 +1,5 @@
 FROM php:8.2-cli
 
-# Install system dependencies
 RUN apt-get update && apt-get install -y \
     git \
     curl \
@@ -9,27 +8,24 @@ RUN apt-get update && apt-get install -y \
     nodejs \
     npm
 
-# Install PHP extensions
 RUN docker-php-ext-install pdo pdo_mysql zip
 
-# Install Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 WORKDIR /var/www
 
 COPY . .
 
-# Install dependencies
 RUN composer install --no-dev --optimize-autoloader
 
-# Install and build frontend
 RUN npm install
 RUN npm run build
 
-# Laravel optimizations
 RUN php artisan config:cache
 RUN php artisan route:cache
 RUN php artisan view:cache
+
+RUN php artisan storage:link || true
 
 EXPOSE 10000
 
