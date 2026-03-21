@@ -70,12 +70,18 @@ class HabitController extends Controller
         //
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, string $id)
     {
-        //
+        $validated = $request->validate([
+            'name' => 'required|string|min:2|max:50',
+        ]);
+
+        $habit = Habit::where('user_id', Auth::id())->findOrFail($id);
+        $habit->update([
+            'name' => $validated['name'],
+        ]);
+
+        return redirect()->back()->with('success', 'Habit updated!');
     }
 
     /**
@@ -83,6 +89,9 @@ class HabitController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $habit = Habit::where('user_id', Auth::id())->findOrFail($id);
+        $habit->delete();
+
+        return redirect()->back()->with('success', 'Habit deleted!');
     }
 }
