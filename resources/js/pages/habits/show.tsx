@@ -1,5 +1,5 @@
-import Header from "@/layouts/partials/Header"
 import { useMemo } from "react"
+import Header from "@/layouts/partials/Header"
 
 interface HabitDetailsProps {
     habit: any;
@@ -27,6 +27,7 @@ function HabitDetails({ habit, trackedDates = [] }: HabitDetailsProps) {
                 isTracked: trackedDates.includes(dateString)
             });
         }
+
         return days;
     }, [trackedDates]);
 
@@ -34,9 +35,12 @@ function HabitDetails({ habit, trackedDates = [] }: HabitDetailsProps) {
         <div className="container">
             <Header />
             <main className="py-8">
-                <h1 className="text-3xl font-bold mb-8 text-gray-900 dark:text-gray-100">
+                <h1 className="text-3xl font-bold mb-1 text-gray-900 dark:text-gray-100">
                     {habit.name}
                 </h1>
+                <strong className="text-xl flex items-end">Current Streak: x {trackedDates.length} days
+                    <img className="w-12" src="https://media1.giphy.com/media/v1.Y2lkPTc5MGI3NjExMjF6NXczdzRlNDl5aThibWloMm41NHR3MTQ2bWE4aXRqN2d1aTc4aSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/1wPC7g6WN1HtqAiBq1/giphy.gif" alt="Streak Sticker" />
+                </strong>
 
                 <div className="bg-white dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 p-6 rounded-xl shadow-sm">
                     <h2 className="text-lg font-semibold mb-6 text-gray-800 dark:text-gray-200">Tracking History (Last 365 Days)</h2>
