@@ -21,5 +21,6 @@ export type PaginatedData<T> = {
 export type Habit = {
   id: number;
   name: string;
+  description?: string | null;
   tracked_today?: Date;
 };

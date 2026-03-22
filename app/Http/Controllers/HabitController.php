@@ -44,11 +44,13 @@ class HabitController extends Controller
     {
         $validated = $request->validate([
             'name' => 'required|string|min:2|max:50',
+            'description' => 'nullable|string|max:250',
         ]);
 
         Habit::create([
             'user_id' => Auth::id(),
             'name' => $validated['name'],
+            'description' => $validated['description'] ?? null,
         ]);
 
         return redirect()->back()->with('success', 'Habit created!');
@@ -74,11 +76,13 @@ class HabitController extends Controller
     {
         $validated = $request->validate([
             'name' => 'required|string|min:2|max:50',
+            'description' => 'nullable|string|max:250',
         ]);
 
         $habit = Habit::where('user_id', Auth::id())->findOrFail($id);
         $habit->update([
             'name' => $validated['name'],
+            'description' => $validated['description'] ?? null,
         ]);
 
         return redirect()->back()->with('success', 'Habit updated!');

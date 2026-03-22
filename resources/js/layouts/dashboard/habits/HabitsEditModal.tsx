@@ -17,6 +17,11 @@ const habitSchema = z.object({
         .string()
         .min(2, "Habit name must be at least 2 characters")
         .max(50, "Habit name is too long"),
+    description: z
+        .string()
+        .max(250, "Description is too long")
+        .optional()
+        .or(z.literal("")),
 })
 
 type HabitFormValues = z.infer<typeof habitSchema>
@@ -37,12 +42,16 @@ function HabitsEditModal({ habit, open, setOpen }: HabitsEditModalProps) {
         resolver: zodResolver(habitSchema),
         defaultValues: {
             name: habit?.name || "",
+            description: habit?.description ?? "",
         }
     })
 
     useEffect(() => {
         if (habit) {
-            reset({ name: habit.name });
+            reset({
+                name: habit.name,
+                description: habit.description ?? "",
+            });
         }
     }, [habit, reset]);
 
@@ -73,6 +82,17 @@ function HabitsEditModal({ habit, open, setOpen }: HabitsEditModalProps) {
                     </Field>
                     {errors.name &&
                         <p className="text-red-400 py-2">{errors.name.message}</p>
+                    }
+                    <Field className="mt-3">
+                        <Label htmlFor="edit-description">Why are you Startig this habit?</Label>
+                        <Input
+                            id="edit-description"
+                            maxLength={250}
+                            {...register("description")}
+                        />
+                    </Field>
+                    {errors.description &&
+                        <p className="text-red-400 py-2">{errors.description.message}</p>
                     }
                     <DialogFooter className="mt-3">
                         <DialogClose asChild>

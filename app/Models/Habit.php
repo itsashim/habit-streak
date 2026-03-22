@@ -9,10 +9,11 @@ class Habit extends Model
     public $fillable = [
         'user_id',
         'name',
+        'description',
     ];
 
     public function trackers()
     {
-        return $this->hasMany(HabitTracker::class); // Adjust if your foreign key is different
+        return $this->hasMany(HabitTracker::class);
     }
 }
