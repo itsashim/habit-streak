@@ -1,4 +1,5 @@
 import { useMemo } from "react"
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip"
 import Header from "@/layouts/partials/Header"
 
 interface HabitDetailsProps {
@@ -7,6 +8,7 @@ interface HabitDetailsProps {
 }
 
 function HabitDetails({ habit, trackedDates = [] }: HabitDetailsProps) {
+    const hasDescription = Boolean(habit?.description?.trim?.());
     const calendarDays = useMemo(() => {
         const days = [];
         const today = new Date();
@@ -35,8 +37,29 @@ function HabitDetails({ habit, trackedDates = [] }: HabitDetailsProps) {
         <div className="container">
             <Header />
             <main className="py-8">
-                <h1 className="text-3xl font-bold mb-1 text-gray-900 dark:text-gray-100">
+                <h1 className="text-3xl font-bold mb-1 text-gray-900 dark:text-gray-100 flex items-center gap-2">
                     {habit.name}
+                    {hasDescription && (
+                        <Tooltip>
+                            <TooltipTrigger asChild>
+                                <button
+                                    type="button"
+                                    className="inline-flex size-6 items-center justify-center rounded-full border border-gray-200 text-sm font-semibold text-gray-700 transition-colors hover:bg-gray-100 dark:border-zinc-700 dark:text-gray-200 dark:hover:bg-zinc-800"
+                                    aria-label="Why did you start this habit?"
+                                >
+                                    ?
+                                </button>
+                            </TooltipTrigger>
+                            <TooltipContent side={"right"} className="max-w-xs">
+                                <p className="text-xs font-semibold uppercase tracking-wide">
+                                    Why did you start this habit?
+                                </p>
+                                <p className="mt-1 text-sm">
+                                    {habit.description}
+                                </p>
+                            </TooltipContent>
+                        </Tooltip>
+                    )}
                 </h1>
                 <strong className="text-xl flex items-end">Current Streak: x {trackedDates.length} days
                     <img className="w-12" src="https://media1.giphy.com/media/v1.Y2lkPTc5MGI3NjExMjF6NXczdzRlNDl5aThibWloMm41NHR3MTQ2bWE4aXRqN2d1aTc4aSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/1wPC7g6WN1HtqAiBq1/giphy.gif" alt="Streak Sticker" />
