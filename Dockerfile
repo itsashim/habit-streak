@@ -1,41 +1,50 @@
-# Use PHP-FPM image
-FROM php:8.2-fpm
+FROM php:8.2-apache
 
-WORKDIR /var/www
-
-# Install dependencies
+# Install system dependencies
 RUN apt-get update && apt-get install -y \
-    git curl unzip libzip-dev libpq-dev nodejs npm \
-    && docker-php-ext-install pdo pdo_pgsql zip \
-    && apt-get clean && rm -rf /var/lib/apt/lists/*
+    git \
+    curl \
+    zip \
+    unzip \
+    libpq-dev \
+    libpng-dev \
+    libonig-dev \
+    libxml2-dev \
+    && docker-php-ext-install \
+        pdo \
+        pdo_pgsql \
+        mbstring \
+        exif \
+        pcntl \
+        bcmath \
+        gd
+
+# Enable Apache mod_rewrite (required for Laravel)
+RUN a2enmod rewrite
 
 # Install Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-# Copy app code
+# Set working directory
+WORKDIR /var/www/html
+
+# Copy project
 COPY . .
 
-# Install PHP deps
+# Install PHP dependencies
 RUN composer install --no-dev --optimize-autoloader
 
-# Build frontend
-RUN npm install && npm run build
+# Set Laravel public folder as document root
+ENV APACHE_DOCUMENT_ROOT=/var/www/html/public
 
-# Cache Laravel configs
-RUN php artisan config:cache \
-    && php artisan route:cache \
-    && php artisan view:cache \
-    && php artisan storage:link || true
+RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' \
+    /etc/apache2/sites-available/*.conf
 
-# Set permissions
-RUN chown -R www-data:www-data storage bootstrap/cache \
-    && chmod -R 775 storage bootstrap/cache
-
-# Run migrations during image build
-RUN php artisan migrate --force
+# Permissions
+RUN chown -R www-data:www-data storage bootstrap/cache
 
 # Expose port
-EXPOSE 9000
+EXPOSE 80
 
-# Start PHP-FPM
-CMD ["php-fpm"]
+# Start Apache
+CMD ["apache2-foreground"]
